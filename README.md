@@ -1,4 +1,4 @@
-# yajwt [![Build Status](https://secure.travis-ci.org/auth0/node-jsonwebtoken.png)](http://travis-ci.org/auth0/node-jsonwebtoken)
+# yajwt [![Build Status](https://travis-ci.org/simon-p-r/yajwt.svg?branch=master)](https://travis-ci.org/simon-p-r/yajwt)
 
 
 An implementation of [JSON Web Tokens](https://tools.ietf.org/html/rfc7519).
