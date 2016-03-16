@@ -1,6 +1,6 @@
 {
   "name": "yajwt",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "yet another json web token library",
   "main": "lib/index.js",
   "directories": {

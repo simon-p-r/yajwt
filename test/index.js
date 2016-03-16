@@ -109,7 +109,7 @@ describe('Jwt', () => {
 
     });
 
-    it('should return false when verify a payload sync due to missing signature', (done) => {
+    it('should return false when verifying a payload due to missing signature', (done) => {
 
         const ops = verifyOptions();
         const valid = Jwt.verify(ops);
@@ -118,7 +118,7 @@ describe('Jwt', () => {
 
     });
 
-    it('should return false when verify a payload sync due to an invalid signature', (done) => {
+    it('should return false when verifying a payload due to an invalid signature', (done) => {
 
         const result = Jwt.sign(signingOptions());
         const ops = verifyOptions(result.token);
@@ -204,7 +204,7 @@ describe('Jwt', () => {
 
     });
 
-    it('should fail verfiy on timestamp checking', (done) => {
+    it('should return false when verifying timestamp', (done) => {
 
         const signOps = signingOptions();
         signOps.payload.exp = 1000;
@@ -218,7 +218,7 @@ describe('Jwt', () => {
 
     });
 
-    it('should fail verfiy on timestamp checking due to invalid nbf', (done) => {
+    it('should return false when verifying due to an invalid nbf timestamp', (done) => {
 
         const signOps = signingOptions();
         signOps.payload.nbf = 2000000000;
@@ -230,7 +230,7 @@ describe('Jwt', () => {
 
     });
 
-    it('should pass verfiy on timestamp checking', (done) => {
+    it('should return true when verifying a valid timestamp', (done) => {
 
         const signOps = signingOptions();
         signOps.payload.iat = '1d';

@@ -61,7 +61,8 @@ jwt.sign({ header: { alg: 'HS256' }, payload: {aud: 'private'}, privateKey: key 
 ### jwt.verify(options, callback)
 
 (Asynchronous) If a callback is supplied, function acts asynchronously. Callback has err, valid signature
-(Synchronous) If a callback is not supplied, function acts synchronously. Returns true or false if valid or not
+
+(Synchronous) If a callback is not supplied, function acts synchronously. Returns true or false depending on whether token can be verified as valid
 
 
 
@@ -93,3 +94,5 @@ Todo
 * improve api
 * improve error handling
 * improve docs
+
+#### Disclaimer api is in early development so is likely to change until v1.0.0
