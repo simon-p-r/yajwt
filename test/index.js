@@ -134,10 +134,10 @@ describe('Jwt', () => {
 
         const result = Jwt.sign(signingOptions());
         const ops = verifyOptions(result.token);
-        Jwt.verify(ops, (err, valid) => {
+        Jwt.verify(ops, (err, decoded) => {
 
             expect(err).to.not.exist();
-            expect(valid).to.be.true();
+            expect(decoded).to.exist();
             done();
 
         });
@@ -147,10 +147,10 @@ describe('Jwt', () => {
     it('should return an error when verifying a payload async due to missing signature', (done) => {
 
         const ops = verifyOptions();
-        Jwt.verify(ops, (err, valid) => {
+        Jwt.verify(ops, (err, decoded) => {
 
             expect(err).to.exist();
-            expect(valid).to.be.null();
+            expect(decoded).to.not.exist();
             done();
 
         });
@@ -163,10 +163,10 @@ describe('Jwt', () => {
         const result = Jwt.sign(signingOptions());
         const ops = verifyOptions(result.token);
         ops.signature = 'This is an invalid token';
-        Jwt.verify(ops, (err, token) => {
+        Jwt.verify(ops, (err, decoded) => {
 
             expect(err).to.exist();
-            expect(token).to.be.null();
+            expect(decoded).to.not.exist();
             done();
 
         });
@@ -178,10 +178,10 @@ describe('Jwt', () => {
         const result = Jwt.sign(signingOptions());
         const ops = verifyOptions(result.token);
         ops.algorithm = 'HS256';
-        Jwt.verify(ops, (err, token) => {
+        Jwt.verify(ops, (err, decoded) => {
 
             expect(err).to.exist();
-            expect(token).to.be.null();
+            expect(decoded).to.not.exist();
             done();
 
         });
@@ -194,10 +194,10 @@ describe('Jwt', () => {
         signOps.payload.exp = (Math.floor(Date.now() / 1000)) - 1;
         const result = Jwt.sign(signOps);
         const ops = verifyOptions(result.token);
-        Jwt.verify(ops, (err, token) => {
+        Jwt.verify(ops, (err, decoded) => {
 
             expect(err).to.exist();
-            expect(token).to.be.null();
+            expect(decoded).to.not.exist();
             done();
 
         });

@@ -81,9 +81,9 @@ const valid = jwt.verify(token, publicKey);
 console.log(valid) // true
 
 // verify a token symmetric
-jwt.verify({signature: jsonString, algorithm: 'HS256',  publicKey: publicKey}, function(err, valid) {
+jwt.verify({signature: jsonString, algorithm: 'HS256',  publicKey: publicKey}, function(err, decoded) {
   console.log(err) // null
-  console.log(valid) //true
+  console.log(decoded) // decoded token meaning payload verified
 });
 ```
 
