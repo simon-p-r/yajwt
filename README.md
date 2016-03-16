@@ -33,7 +33,7 @@ $ npm install yajwt
   * `jti`: string - unique identity of token
   * `nbf`: expressed in seconds or a string describing a time span [rauchg/ms](https://github.com/rauchg/ms.js). Eg: `60`, `"2 days"`, `"10h"`, `"7d"`
   * `sub`: string - describing subject of token
-  * `privateKey`: string or buffer of private key to sign token
+* `privateKey`: string or buffer of private key to sign token
 
 
 

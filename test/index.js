@@ -67,7 +67,7 @@ describe('Jwt', () => {
         const ops = signingOptions();
         ops.header.alg = null;
         const result = Jwt.sign(ops);
-        expect(result.token).to.be.undefined();
+        expect(result.token).to.not.exist();
         expect(result.error).to.exist();
         done();
 
@@ -134,10 +134,10 @@ describe('Jwt', () => {
 
         const result = Jwt.sign(signingOptions());
         const ops = verifyOptions(result.token);
-        Jwt.verify(ops, (err, token) => {
+        Jwt.verify(ops, (err, valid) => {
 
             expect(err).to.not.exist();
-            expect(token).to.be.true();
+            expect(valid).to.be.true();
             done();
 
         });
@@ -147,6 +147,22 @@ describe('Jwt', () => {
     it('should return an error when verifying a payload async due to missing signature', (done) => {
 
         const ops = verifyOptions();
+        Jwt.verify(ops, (err, valid) => {
+
+            expect(err).to.exist();
+            expect(valid).to.be.null();
+            done();
+
+        });
+
+    });
+
+
+    it('should return an error when verifying a payload async due to invalid signature', (done) => {
+
+        const result = Jwt.sign(signingOptions());
+        const ops = verifyOptions(result.token);
+        ops.signature = 'This is an invalid token';
         Jwt.verify(ops, (err, token) => {
 
             expect(err).to.exist();
@@ -157,11 +173,11 @@ describe('Jwt', () => {
 
     });
 
-    it('should return an error when verifying a payload async due to invalid signature', (done) => {
+    it('should return an error when verifying a payload async due to mismatch in signing algorithm', (done) => {
 
         const result = Jwt.sign(signingOptions());
         const ops = verifyOptions(result.token);
-        ops.signature = 'This is an invalid token';
+        ops.algorithm = 'HS256';
         Jwt.verify(ops, (err, token) => {
 
             expect(err).to.exist();
