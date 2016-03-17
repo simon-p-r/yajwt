@@ -55,7 +55,7 @@ describe('Jwt', () => {
 
     it('should sign a payload sync', (done) => {
 
-        const result = Jwt.sign(signingOptions());
+        const result = Jwt.signSync(signingOptions());
         expect(result.token).to.be.a.string();
         expect(result.error).to.not.exist();
         done();
@@ -66,7 +66,7 @@ describe('Jwt', () => {
 
         const ops = signingOptions();
         ops.header.alg = null;
-        const result = Jwt.sign(ops);
+        const result = Jwt.signSync(ops);
         expect(result.token).to.not.exist();
         expect(result.error).to.exist();
         done();
@@ -85,6 +85,21 @@ describe('Jwt', () => {
 
     });
 
+    it('should return an error when signing a payload async due invalid key', (done) => {
+
+        const ops = signingOptions();
+        ops.privateKey = PublicKey;
+        Jwt.sign(ops, (err, token) => {
+
+            expect(err).to.exist();
+            expect(token).to.not.exist();
+            done();
+
+        });
+
+    });
+
+
     it('should return an error when signing a payload async due to missing algorithm', (done) => {
 
         const ops = signingOptions();
@@ -101,9 +116,9 @@ describe('Jwt', () => {
 
     it('should verify a payload sync', (done) => {
 
-        const result = Jwt.sign(signingOptions());
+        const result = Jwt.signSync(signingOptions());
         const ops = verifyOptions(result.token);
-        const valid = Jwt.verify(ops);
+        const valid = Jwt.verifySync(ops);
         expect(valid).to.be.true();
         done();
 
@@ -112,7 +127,7 @@ describe('Jwt', () => {
     it('should return false when verifying a payload due to missing signature', (done) => {
 
         const ops = verifyOptions();
-        const valid = Jwt.verify(ops);
+        const valid = Jwt.verifySync(ops);
         expect(valid).to.be.false();
         done();
 
@@ -120,10 +135,10 @@ describe('Jwt', () => {
 
     it('should return false when verifying a payload due to an invalid signature', (done) => {
 
-        const result = Jwt.sign(signingOptions());
+        const result = Jwt.signSync(signingOptions());
         const ops = verifyOptions(result.token);
         ops.signature = 'This is invalid';
-        const valid = Jwt.verify(ops);
+        const valid = Jwt.verifySync(ops);
         expect(valid).to.be.false();
         done();
 
@@ -132,7 +147,7 @@ describe('Jwt', () => {
 
     it('should verify a payload async', (done) => {
 
-        const result = Jwt.sign(signingOptions());
+        const result = Jwt.signSync(signingOptions());
         const ops = verifyOptions(result.token);
         Jwt.verify(ops, (err, decoded) => {
 
@@ -144,7 +159,7 @@ describe('Jwt', () => {
 
     });
 
-    it('should return an error when verifying a payload async due to missing signature', (done) => {
+    it('should return a joi error when verifying a payload async due to missing signature', (done) => {
 
         const ops = verifyOptions();
         Jwt.verify(ops, (err, decoded) => {
@@ -160,7 +175,7 @@ describe('Jwt', () => {
 
     it('should return an error when verifying a payload async due to invalid signature', (done) => {
 
-        const result = Jwt.sign(signingOptions());
+        const result = Jwt.signSync(signingOptions());
         const ops = verifyOptions(result.token);
         ops.signature = 'This is an invalid token';
         Jwt.verify(ops, (err, decoded) => {
@@ -175,7 +190,7 @@ describe('Jwt', () => {
 
     it('should return an error when verifying a payload async due to mismatch in signing algorithm', (done) => {
 
-        const result = Jwt.sign(signingOptions());
+        const result = Jwt.signSync(signingOptions());
         const ops = verifyOptions(result.token);
         ops.algorithm = 'HS256';
         Jwt.verify(ops, (err, decoded) => {
@@ -188,11 +203,29 @@ describe('Jwt', () => {
 
     });
 
+
+    it('should return an error when verifying a payload async due to invalid publicKey', (done) => {
+
+        const result = Jwt.signSync(signingOptions());
+        const ops = verifyOptions(result.token);
+        ops.publicKey = PrivateKey;
+
+        Jwt.verify(ops, (err, decoded) => {
+
+            expect(err).to.exist();
+            expect(decoded).to.not.exist();
+            done();
+
+        });
+
+    });
+
+
     it('should return an error when verifying a payload async due to invalid timestamps', (done) => {
 
         const signOps = signingOptions();
         signOps.payload.exp = (Math.floor(Date.now() / 1000)) - 1;
-        const result = Jwt.sign(signOps);
+        const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
         Jwt.verify(ops, (err, decoded) => {
 
@@ -210,9 +243,9 @@ describe('Jwt', () => {
         signOps.payload.exp = 1000;
         signOps.payload.iat = 2000000000;
         delete signOps.payload.nbf;
-        const result = Jwt.sign(signOps);
+        const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
-        const verify = Jwt.verify(ops);
+        const verify = Jwt.verifySync(ops);
         expect(verify).to.be.false();
         done();
 
@@ -222,9 +255,9 @@ describe('Jwt', () => {
 
         const signOps = signingOptions();
         signOps.payload.nbf = 2000000000;
-        const result = Jwt.sign(signOps);
+        const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
-        const verify = Jwt.verify(ops);
+        const verify = Jwt.verifySync(ops);
         expect(verify).to.be.false();
         done();
 
@@ -235,9 +268,9 @@ describe('Jwt', () => {
         const signOps = signingOptions();
         signOps.payload.iat = '1d';
         delete signOps.payload.exp;
-        const result = Jwt.sign(signOps);
+        const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
-        const verify = Jwt.verify(ops);
+        const verify = Jwt.verifySync(ops);
         expect(verify).to.be.true();
         done();
 
@@ -245,7 +278,7 @@ describe('Jwt', () => {
 
     it('should return a decoded json web token', (done) => {
 
-        const result = Jwt.sign(signingOptions());
+        const result = Jwt.signSync(signingOptions());
         const decoded = Jwt.decode(result.token);
         expect(decoded).to.be.an.object();
         expect(decoded.header.alg).to.equal('RS256');

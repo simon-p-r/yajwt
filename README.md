@@ -15,8 +15,9 @@ $ npm install yajwt
 
 ### jwt.sign(options, [callback])
 
-(Asynchronous) If a callback is supplied, function will return asynchronously
+(Asynchronous) Callback has err, JWT string signature
 
+### jwt.signSync(options)
 (Synchronous) Returns an object with an error(on failure) and token property (on success)
 
 
@@ -49,7 +50,8 @@ const jwt = require('yajwt');
 
 // read key for signing
 const key = fs.readFileSync('private.pem');  
-const token = jwt.sign({ header: { alg: 'HS256' }, payload: {aud: 'private'}, privateKey: key });
+const signed = jwt.signSync({ header: { alg: 'HS256' }, payload: {aud: 'private'}, privateKey: key });
+console.log(signed.token); /// prints JWT string
 
 
 // sign asynchronously
@@ -60,9 +62,11 @@ jwt.sign({ header: { alg: 'HS256' }, payload: {aud: 'private'}, privateKey: key 
 
 ### jwt.verify(options, callback)
 
-(Asynchronous) If a callback is supplied, function acts asynchronously. Callback has err, valid signature
+(Asynchronous) Callback has err, decoded JWT signature
 
-(Synchronous) If a callback is not supplied, function acts synchronously. Returns true or false depending on whether token can be verified as valid
+### jwt.verifySync(options)
+
+(Synchronous) Returns true or false depending on whether token can be verified as valid
 
 
 
@@ -78,11 +82,11 @@ encoded public key for RSA and ECDSA.
 // verify a token asymmetric
 const publicKey = fs.readFileSync('public.pem');  // get public key
 
-const valid = jwt.verify(token, publicKey);
+const valid = jwt.verifySync(token, publicKey);
 console.log(valid) // true
 
 // verify a token symmetric
-jwt.verify({signature: jsonString, algorithm: 'HS256',  publicKey: publicKey}, function(err, decoded) {
+jwt.verify({signature: jsonString, algorithm: 'HS256',  publicKey: publicKey}, (err, decoded) => {
   console.log(err) // null
   console.log(decoded) // decoded token meaning payload verified
 });
@@ -90,9 +94,4 @@ jwt.verify({signature: jsonString, algorithm: 'HS256',  publicKey: publicKey}, f
 
 Todo
 
-* improve timestamps
-* improve api
-* improve error handling
-* improve docs
-
-#### Disclaimer api is in early development so is likely to change until v1.0.0
+* improve error handling for missing callback on async funcs
