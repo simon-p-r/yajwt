@@ -10,7 +10,7 @@ const Path = require('path');
 // fixtures
 const PrivateKey = Fs.readFileSync(Path.resolve(__dirname, './fixtures/private.pem'));
 const PublicKey = Fs.readFileSync(Path.resolve(__dirname, './fixtures/public.pem'));
-
+const Token = Fs.readFileSync(Path.resolve(__dirname, './fixtures/test.token'), 'utf8');
 
 // Set-up lab
 const lab = exports.lab = Lab.script();
@@ -40,7 +40,7 @@ const signingOptions = () => {
         // payload can be object, buffer or string
         payload: {
             exp: '365d',
-            nbf: '1d',
+            nbf: Date.now(),
             host: Os.hostname(),
             port: 3000
         },
@@ -116,8 +116,7 @@ describe('Jwt', () => {
 
     it('should verify a payload sync', (done) => {
 
-        const result = Jwt.signSync(signingOptions());
-        const ops = verifyOptions(result.token);
+        const ops = verifyOptions(Token);
         const valid = Jwt.verifySync(ops);
         expect(valid).to.be.true();
         done();
@@ -147,8 +146,7 @@ describe('Jwt', () => {
 
     it('should verify a payload async', (done) => {
 
-        const result = Jwt.signSync(signingOptions());
-        const ops = verifyOptions(result.token);
+        const ops = verifyOptions(Token);
         Jwt.verify(ops, (err, decoded) => {
 
             expect(err).to.not.exist();
@@ -224,7 +222,7 @@ describe('Jwt', () => {
     it('should return an error when verifying a payload async due to invalid timestamps', (done) => {
 
         const signOps = signingOptions();
-        signOps.payload.exp = (Math.floor(Date.now() / 1000)) - 1;
+        signOps.payload.exp = (Date.now() - 1);
         const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
         Jwt.verify(ops, (err, decoded) => {
@@ -237,12 +235,22 @@ describe('Jwt', () => {
 
     });
 
-    it('should return false when verifying timestamp', (done) => {
+    it('should return false when verifying timestamp due to invalid exp', (done) => {
 
         const signOps = signingOptions();
         signOps.payload.exp = 1000;
-        signOps.payload.iat = 2000000000;
-        delete signOps.payload.nbf;
+        const result = Jwt.signSync(signOps);
+        const ops = verifyOptions(result.token);
+        const verify = Jwt.verifySync(ops);
+        expect(verify).to.be.false();
+        done();
+
+    });
+
+    it('should return false when verifying timestamp due to invalid iat', (done) => {
+
+        const signOps = signingOptions();
+        signOps.payload.iat = (Date.now() + 5000);
         const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
         const verify = Jwt.verifySync(ops);
@@ -254,7 +262,7 @@ describe('Jwt', () => {
     it('should return false when verifying due to an invalid nbf timestamp', (done) => {
 
         const signOps = signingOptions();
-        signOps.payload.nbf = 2000000000;
+        signOps.payload.nbf = (Date.now() + 5000);
         const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
         const verify = Jwt.verifySync(ops);
@@ -266,7 +274,6 @@ describe('Jwt', () => {
     it('should return true when verifying a valid timestamp', (done) => {
 
         const signOps = signingOptions();
-        signOps.payload.iat = '1d';
         delete signOps.payload.exp;
         const result = Jwt.signSync(signOps);
         const ops = verifyOptions(result.token);
