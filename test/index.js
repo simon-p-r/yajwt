@@ -63,6 +63,58 @@ describe('Jwt', () => {
 
     });
 
+    it('should throw an error when field exp cannot be converted to a timestamp', (done) => {
+
+        const options = {
+            header: {
+                alg: 'RS256',
+                // token type
+                typ: 'JWT'
+            },
+            // payload can be object, buffer or string
+            payload: {
+                exp: 'invalid',
+                nbf: Date.now(),
+                iat: '01-01-1990',
+                host: Os.hostname(),
+                port: 3000
+            },
+            privateKey: PrivateKey
+        };
+        expect(() => Jwt.signSync(options)).throws(Error);
+        done();
+
+    });
+
+    it('should return an error when field exp cannot be converted to a timestamp', (done) => {
+
+        const options = {
+            header: {
+                alg: 'RS256',
+                // token type
+                typ: 'JWT'
+            },
+            // payload can be object, buffer or string
+            payload: {
+                exp: 'invalid',
+                nbf: Date.now(),
+                iat: '01-01-1990',
+                host: Os.hostname(),
+                port: 3000
+            },
+            privateKey: PrivateKey
+        };
+
+        Jwt.sign(options, (err, token) => {
+
+            expect(err).to.exist();
+            expect(token).to.not.exist();
+            done();
+
+        });
+
+    });
+
     it('should return an error when signing a payload sync due to missing algorithm', (done) => {
 
         const ops = signingOptions();

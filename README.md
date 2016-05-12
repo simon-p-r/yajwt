@@ -28,11 +28,11 @@ $ npm install yajwt
   * `typ` default 'JWT', this is only accepted value for this property
 * `payload`: object with the following properties
   * `aud`: string - audience of token
-  * `exp`: number ms since EPOCH or a string describing a time duration added to seconds since EPOCH [rauchg/ms](https://github.com/rauchg/ms.js). Eg: `60`, `"2 days"`, `"10h"`, `"7d"` or string accepted by date.parse method
-  * `iat`: same as above, defaults to the moment payload is signed.  If duration is used the value is added to Date.now()
+  * `exp`: number ms since EPOCH or a string describing a time duration added to seconds since EPOCH [rauchg/ms](https://github.com/rauchg/ms.js). Eg: `60`, `"2 days"`, `"10h"`, `"7d"` or Moment formats types ['DD-MM-YYYY', 'DD-MM-YY', 'DD/MM/YYYY', 'DD/MM/YY']
+  * `iat`: same as above, defaults to the time payload is signed.  If duration is used the value is added to Date.now()
   * `iss`: string -  issuer of token
   * `jti`: string - unique identity of token
-  * `nbf`: expressed in ms or a string describing a time span [rauchg/ms](https://github.com/rauchg/ms.js). Eg: `60`, `"2 days"`, `"10h"`, `"7d"`.  If used the duration is added to Date.now()
+  * `nbf`: same as exp
   * `sub`: string - describing subject of token
 * `privateKey`: string or buffer of private key to sign token
 
