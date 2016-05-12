@@ -41,6 +41,7 @@ const signingOptions = () => {
         payload: {
             exp: '365d',
             nbf: Date.now(),
+            iat: '01-01-1990',
             host: Os.hostname(),
             port: 3000
         },

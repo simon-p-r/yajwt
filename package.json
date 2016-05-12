@@ -1,6 +1,6 @@
 {
   "name": "yajwt",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "yet another json web token library",
   "main": "lib/index.js",
   "directories": {
@@ -16,13 +16,13 @@
   "author": "simon-p-r",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "basic-utils": "^1.4.0",
-    "joi": "^8.0.5",
+    "basic-utils": "^1.5.0",
+    "joi": "^8.1.0",
     "jws": "^3.1.3",
     "ms": "^0.7.1"
   },
   "devDependencies": {
-    "code": "^2.2.1",
-    "lab": "^10.3.2"
+    "code": "^2.3.0",
+    "lab": "^10.5.1"
   }
 }
