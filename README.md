@@ -1,4 +1,6 @@
-# yajwt [![Build Status](https://travis-ci.org/simon-p-r/yajwt.svg?branch=master)](https://travis-ci.org/simon-p-r/yajwt)
+# yajwt 
+[![Build Status](https://travis-ci.org/simon-p-r/yajwt.svg?branch=master)](https://travis-ci.org/simon-p-r/yajwt)
+[![Coverage Status](https://coveralls.io/repos/github/simon-p-r/yajwt/badge.svg?branch=master)](https://coveralls.io/github/simon-p-r/yajwt?branch=master)
 
 
 An implementation of [JSON Web Tokens](https://tools.ietf.org/html/rfc7519).
