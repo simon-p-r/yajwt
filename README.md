@@ -1,7 +1,9 @@
 # yajwt 
-[![Build Status](https://travis-ci.org/simon-p-r/yajwt.svg?branch=master)](https://travis-ci.org/simon-p-r/yajwt)
-[![Coverage Status](https://coveralls.io/repos/github/simon-p-r/yajwt/badge.svg?branch=master)](https://coveralls.io/github/simon-p-r/yajwt?branch=master)
-
+[![build status](https://travis-ci.org/simon-p-r/yajwt.svg?branch=master)](https://travis-ci.org/simon-p-r/yajwt)
+[![Current Version](https://img.shields.io/npm/v/yajwt.svg?maxAge=1000)](https://www.npmjs.org/package/yajwt)
+[![dependency Status](https://img.shields.io/david/simon-p-r/yajwt.svg?maxAge=1000)](https://david-dm.org/simon-p-r/yajwt)
+[![devDependency Status](https://img.shields.io/david/dev/simon-p-r/yajwt.svg?maxAge=1000)](https://david-dm.org/simon-p-r/yajwt)
+[![Coveralls](https://img.shields.io/coveralls/simon-p-r/yajwt.svg?maxAge=1000)](https://coveralls.io/github/simon-p-r/yajwt)
 
 An implementation of [JSON Web Tokens](https://tools.ietf.org/html/rfc7519).
 
