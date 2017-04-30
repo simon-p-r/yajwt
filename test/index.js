@@ -10,7 +10,6 @@ const Path = require('path');
 // fixtures
 const PrivateKey = Fs.readFileSync(Path.resolve(__dirname, './fixtures/private.pem'));
 const PublicKey = Fs.readFileSync(Path.resolve(__dirname, './fixtures/public.pem'));
-const Token = Fs.readFileSync(Path.resolve(__dirname, './fixtures/test.token'), 'utf8');
 
 // Set-up lab
 const lab = exports.lab = Lab.script();
@@ -40,7 +39,7 @@ const signingOptions = () => {
         // payload can be object, buffer or string
         payload: {
             exp: '365d',
-            nbf: Date.now(),
+            nbf: Date.now() - 10000,
             iat: '01-01-1990',
             host: Os.hostname(),
             port: 3000
@@ -169,7 +168,8 @@ describe('Jwt', () => {
 
     it('should verify a payload sync', (done) => {
 
-        const ops = verifyOptions(Token);
+        const result = Jwt.signSync(signingOptions());
+        const ops = verifyOptions(result.token);
         const valid = Jwt.verifySync(ops);
         expect(valid).to.be.true();
         done();
@@ -199,7 +199,8 @@ describe('Jwt', () => {
 
     it('should verify a payload async', (done) => {
 
-        const ops = verifyOptions(Token);
+        const result = Jwt.signSync(signingOptions());
+        const ops = verifyOptions(result.token);
         Jwt.verify(ops, (err, decoded) => {
 
             expect(err).to.not.exist();
