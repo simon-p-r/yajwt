@@ -26,6 +26,6 @@
   "devDependencies": {
     "code": "^4.0.0",
     "coveralls": "^2.13.1",
-    "lab": "^13.0.2"
+    "lab": "^15.5.0"
   }
 }
