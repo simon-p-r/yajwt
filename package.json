@@ -24,7 +24,7 @@
     "ms": "^1.0.0"
   },
   "devDependencies": {
-    "code": "^4.0.0",
+    "code": "^5.2.1",
     "coveralls": "^2.13.1",
     "lab": "^13.0.2"
   }
